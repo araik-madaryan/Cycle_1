@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package main;
+package jeuaventure;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -213,10 +213,7 @@ public class JeuAventure {
                 formeSaisie = 'c';
         }
         return formeSaisie;
-    }
-    
-    
-    
+    }  
     
     /*
         *********
@@ -353,16 +350,79 @@ public class JeuAventure {
         );
     }
     
+    /*
+        **********
+        JEU COURSE
+        **********
+    */
     
+    // Cette fonction est la fonction principale du jeu Course. 
+    // Elle permet d'afficher les règles, de saisir le niveau de difficulté, de lancer le jeu. 
+    // Elle retourne vrai si le jeu a été réussi, faux sinon.
     static boolean jeuCourse_principal() {
-        return false;
+        boolean jeuReussi = false;  
+        jeuCourse_afficherRegles();
+        jeuCourse_afficherCourse(1, 1, 1);
+        return jeuReussi;
     }
         
     
     static void jeuCourse_afficherRegles() {
+        System.out.println("Ce jeu se joue à deux. Le premier joueur qui fait passer la ligne d'arrivée à un joueur a gagné.");
+        System.out.println("A chaque tour, un seul pion se déplace de 1, 2, ou 3 cases.");
+        System.out.println("Excepté au démarrage, deux pions ne peuvent pas être positonnés au même endroit.");
+    }
+    
+    static void jeuCourse_afficherCourse(int posJ1, int posJ2, int posJ3) {
+        char c = '♥';
+        char t = '♣';
+        char p = '♠';
+        char pos = ' ';
+        
+        System.out.println(" - - - - - - - - - ARRIVEE");
+        // JOUEUR 1
+        for (int i = 1; i <= 10; i++) {
+            System.out.print("|");
+            if (i == posJ1) {
+                System.out.print(c);
+            } else {
+                System.out.print(pos);
+            }
+        }
+        System.out.println("|");
+        // JOUEUR 2
+        for (int i = 1; i <= 10; i++) {
+            System.out.print("|");
+            if (i == posJ2) {
+                System.out.print(t);
+            } else {
+                System.out.print(pos);
+            }
+        }
+        System.out.println("|");
+        // JOUEUR 3
+        for (int i = 1; i <= 10; i++) {
+            System.out.print("|");
+            if (i == posJ3) {
+                System.out.print(p);
+            } else {
+                System.out.print(pos);
+            }
+        }
+        System.out.println("|");
+        System.out.println(" - - - - - - - - - ARRIVEE");
+    }
+    
+    static int jeuCourse_joueurSuivant(int joueurActif) {
+        
+        return joueurActif;
     }
     
     
+    
+    // Cette fonction est la fonction principale du jeu Devin. 
+    // Elle permet d'afficher les règles, de saisir le niveau de difficulté, de lancer le jeu. 
+    // Elle retourne vrai si le jeu a été réussi, faux sinon.
     static boolean jeuDevin_principal() {
         int n = 0;
         boolean jeuReussi = false;
@@ -376,46 +436,53 @@ public class JeuAventure {
         
         return jeuReussi;
     }
-        
+    
+    // Cette fonction tire aléatoirement un intervalle de nombre, et détermine un combre de coups possibles en fonction du niveau de difficulté choisi.
+    // Elle passe ses valeurs en paramètre de la fonction jeuDevin_chercherNombre()
+    // Elle retourne vrai ou faux si la partie est réussie.
     static boolean jeuDevin_partie(int niveauDifficulte) {
         int c = 10;
         int nombreAleatoire = 0;
-        int nombreSaisi = 0;
+        int nombreMax = 0;
         boolean partieReussie = false;
-
+        
         switch(niveauDifficulte) {
             case 1:
                 c = 5;
-                nombreAleatoire = jeuAventure_nombreAleatoire(0, 10);
-                System.out.println("Vous devez saisir un nombre entre : 0 et 10");
+                nombreMax = 10;
+                nombreAleatoire = jeuAventure_nombreAleatoire(0, nombreMax);
                 break;
             case 2:
-                nombreAleatoire = jeuAventure_nombreAleatoire(0, 50);
-                System.out.println("Vous devez saisir un nombre entre : 0 et 50");
+                nombreMax = 50;
+                nombreAleatoire = jeuAventure_nombreAleatoire(0, nombreMax);
                 break;
             default:
-                nombreAleatoire = jeuAventure_nombreAleatoire(0, 100);
-                System.out.println("Vous devez saisir un nombre entre : 0 et 100");
+                nombreMax = 100;
+                nombreAleatoire = jeuAventure_nombreAleatoire(0, nombreMax);
         }
-        
-        System.out.println(nombreAleatoire);
-        partieReussie = jeuDevin_chercherNombre(nombreSaisi, nombreAleatoire, c, partieReussie);
-        
+        partieReussie = jeuDevin_chercherNombre(nombreAleatoire, c, nombreMax, partieReussie);
         return partieReussie;
     }
     
-    static boolean jeuDevin_chercherNombre(int nombreSaisi, int nombreAleatoire, int c, boolean partieReussie) {
+    // Cette fonction permet au joueur de chercher le nombre aléatoire en un certain nombre de coups.
+    // Elle guide le joueur en indiquant si le nombre cherché est plus petit ou plus grand que la valeur saisie.
+    // Elle retourne vrai ou faux si la partie est réussie.
+    static boolean jeuDevin_chercherNombre(int nombreAleatoire, int c, int nombreMax, boolean partieReussie) {
         int i = c;
+        int nombreSaisi = 0;
         
         do {
             System.out.println("**********************");
+            System.out.println("Vous devez saisir un nombre entre : 0 et " + nombreMax);
+            System.out.println("Il vous reste " + i + " coups à jouer.");
+            System.out.println("Veuillez saisir un nombre entre : 0 et " + nombreMax);
             nombreSaisi = jeuAventure_saisirNombre();
+
             if (nombreSaisi < nombreAleatoire) {
                 System.out.println("Nombre proposé trop petit.");
             } else {
                 System.out.println("Nombre proposé trop grand.");
             }
-            System.out.println("Il vous reste " + i + " coups à jouer.");
             i--;
         } while (nombreSaisi != nombreAleatoire && i > 0);
         
@@ -428,8 +495,6 @@ public class JeuAventure {
         }
         return partieReussie;
     }
-
-        
 
      // Ce processus affiche les règles du jeu.
     static void jeuDevin_afficherRegles() {
